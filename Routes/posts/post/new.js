@@ -1,10 +1,10 @@
 const Post = require("../../../schema/Post");
+const Users = require("../../../schema/User");
 const uploadImg = require("../../../utils/uploadImg");
 const generateToken = require("../../../utils/generateToken");
 
-const imgKey = "img";
-
 const add = async (req, res) => {
+  const imgKey = "img";
   const imgName = `imgs/posts/${generateToken(25)}`;
 
   uploadImg({ req, res, imgKey, imgName }, async ({ err, file }) => {
@@ -15,10 +15,22 @@ const add = async (req, res) => {
       return res.status(200).send({ code: 400, msg: "something wrong !" });
 
     const path = `/${file.filename}`;
-    const { user_id, caption } = req.body;
+    const { caption, token } = req.body;
+
+    const user = await Users.findOne({ token }, "_id");
+
+    if (!user._id) {
+      return res.status(200).send({ code: 400, msg: "something wrong !" });
+    }
 
     try {
-      const post = await new Post({ user_id, img: path, caption }).save();
+      let post = {
+        user_id: user._id,
+        img: path,
+        caption,
+      };
+
+      post = await new Post(post).save();
 
       if (post) return res.status(200).send({ code: 200, post });
 

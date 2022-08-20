@@ -10,7 +10,7 @@ const userDataWithToken = require("./get/user-data-with-token");
 const sign = require("./post/sign");
 const login = require("./post/login");
 const follow = require("./post/send-follow");
-const update = require("./post/edit-profile");
+const { updateAvatar, update } = require("./post/edit-profile");
 
 const usersConroller = {
   getPosts,
@@ -21,6 +21,7 @@ const usersConroller = {
   auth,
   userData,
 
+  updateAvatar,
   update,
   login,
   sign,

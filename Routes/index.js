@@ -27,23 +27,6 @@ router.post("/sign-user", usersConroller.sign);
 router.post("/login", usersConroller.login);
 router.post("/follow", usersConroller.follow);
 router.post("/user-data-with-token", usersConroller.userDataWithToken);
-router.post(
-  "/update",
-  (req, res, next) => {
-    const uploadImg = require("../utils/uploadImg");
-    const generateToken = require("../utils/generateToken");
-
-    const imgName = `imgs/avaters/${generateToken(25)}`;
-    const imgKey = "avater";
-
-    uploadImg({ req, res, imgKey, imgName }, async ({ err }) => {
-      if (err)
-        return res.status(200).send({ code: 400, msg: "something wrong !" });
-
-      next();
-    });
-  },
-  usersConroller.update
-);
+router.post("/update", usersConroller.updateAvatar, usersConroller.update);
 
 module.exports = router;

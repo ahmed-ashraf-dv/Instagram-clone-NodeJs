@@ -13,7 +13,7 @@ const uploadImg = async ({ req, res, imgKey, imgName }, next) => {
 
   const fileFilter = (_, file, cb) => {
     // Allowed ext
-    const filetypes = /jpeg|jpg|png/;
+    const filetypes = /jpeg|jpg|png|webp/;
 
     // Check ext
     const extname = filetypes.test(
@@ -31,7 +31,7 @@ const uploadImg = async ({ req, res, imgKey, imgName }, next) => {
   };
 
   const multer_data = multer({
-    limits: 1024 * 1024 * 4 /* 4MB */,
+    limits: 1024 * 1024 * 5 /* 4MB */,
     storage,
     fileFilter,
   });

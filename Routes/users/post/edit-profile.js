@@ -1,5 +1,21 @@
 const User = require("../../../schema/User");
 const fs = require("fs");
+const uploadImg = require("../../../utils/uploadImg");
+const generateToken = require("../../../utils/generateToken");
+
+const updateAvatar = async (req, res, next) => {
+  const imgName = `imgs/avaters/${generateToken(25)}`;
+  const imgKey = "avatar";
+
+  uploadImg({ req, res, imgKey, imgName }, async ({ err }) => {
+    if (err)
+      return res
+        .status(200)
+        .send({ code: 400, msg: err || "something wrong !" });
+
+    next();
+  });
+};
 
 const UpdateProfile = async (req, res) => {
   const { token, username, name, password, email, bio } = req.body;
@@ -52,4 +68,4 @@ const UpdateProfile = async (req, res) => {
   res.status(200).json({ code: 200 });
 };
 
-module.exports = UpdateProfile;
+module.exports = { update: UpdateProfile, updateAvatar };
