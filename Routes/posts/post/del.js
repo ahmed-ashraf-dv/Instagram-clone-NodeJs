@@ -7,7 +7,7 @@ const del = async (req, res) => {
   const { token } = req.body;
   const _id = req.params.id;
   
-  if(!ObjectId.isValid(_id)) return res.send({code: 400, msg: "id not valid"})
+  if(!ObjectId.isValid(_id)) return res.status(200).send({code: 400, msg: "id not valid"})
 
   // get post
   const post = (await Posts.findOne({ _id })) || {};
