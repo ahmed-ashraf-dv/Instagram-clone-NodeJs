@@ -20,9 +20,6 @@ const del = async (req, res) => {
   if (user._id == post.user_id) {
     const postDleted = await Posts.deleteOne({ _id });
 
-console.log(user._id, post.user_id)
-console.log(postDleted)
-
     if (postDleted) {
       fs.unlinkSync(`./public${post?.img}`);
 
