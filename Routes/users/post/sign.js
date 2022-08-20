@@ -31,6 +31,7 @@ const Sign = async (req, res) => {
     email,
     bio: "",
     avatar: getRandomAvatar(),
+    isVerified: false,
   };
 
   const user = await new User(userData).save();

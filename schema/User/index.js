@@ -10,6 +10,7 @@ const UserSchema = new mongoose.Schema(
     email: { type: String, required: true },
     bio: { type: String, default: "No Bio" },
     avatar: { type: String, required: true },
+    isVerified: { type: Boolean, required: false },
   },
   { timestamps: true }
 );

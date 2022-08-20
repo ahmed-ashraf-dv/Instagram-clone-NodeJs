@@ -29,7 +29,7 @@ const getFollowers = async (req, res) => {
         $in: followersData.map((follow) => follow.toUserId),
       },
     },
-    "username _id name email bio avatar"
+    "username _id name email bio avatar isVerified"
   );
 
   const followers = followersData.map((follow) => {
@@ -39,6 +39,7 @@ const getFollowers = async (req, res) => {
       username: currentUser?.username,
       avatar: currentUser?.avatar,
       bio: currentUser?.bio,
+      isVerified: currentUser?.isVerified,
     };
   });
 

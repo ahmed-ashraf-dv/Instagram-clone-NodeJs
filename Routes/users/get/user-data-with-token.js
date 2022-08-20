@@ -3,7 +3,7 @@ const Users = require("../../../schema/User");
 const userDataWithToken = async (req, res) => {
   const user = await Users.findOne(
     { token: req.query.token },
-    "_id username name token email bio avatar createdAt updatedAt"
+    "_id username name token email bio avatar createdAt updatedAt isVerified"
   );
 
   if (!user?.token) {

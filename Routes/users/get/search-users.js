@@ -7,7 +7,10 @@ const searchUsers = async (req, res) => {
     return res.status(200).send({ code: 400, msg: "type query !" });
   }
 
-  let result = await Users.find({}, "_id username name email bio avatar")
+  let result = await Users.find(
+    {},
+    "_id username name email bio avatar isVerified"
+  )
     .sort({ createdAt: -1 })
     .limit(amount)
     .skip((page - 1) * amount);
