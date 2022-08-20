@@ -1,10 +1,13 @@
 const Posts = require("../../../schema/Post");
 const User = require("../../../schema/User");
 const fs = require("fs");
+var ObjectId = require('mongoose').Types.ObjectId;
 
 const del = async (req, res) => {
   const { token } = req.body;
   const _id = req.params.id;
+  
+  if(!ObjectId.isValid(_id)) return res.send({code: 400, msg: "id not valid"})
 
   // get post
   const post = (await Posts.findOne({ _id })) || {};
