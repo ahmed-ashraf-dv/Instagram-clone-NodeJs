@@ -31,7 +31,7 @@ const getExplore = async (req, res) => {
   let total = await Posts.count();
   total = Math.ceil(total / amount);
 
-  if (!posts.at(-1)?.caption) {
+  if (!posts.at(-1)?.img) {
     return res.status(200).send({ total, posts: [] });
   }
 
