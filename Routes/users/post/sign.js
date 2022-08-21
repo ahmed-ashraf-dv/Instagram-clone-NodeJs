@@ -1,4 +1,5 @@
 const User = require("../../../schema/User");
+const Follow = require("../../../schema/Follow");
 const generateToken = require("../../../utils/generateToken");
 
 const getRandomAvatar = () => {
@@ -35,6 +36,19 @@ const Sign = async (req, res) => {
   };
 
   const user = await new User(userData).save();
+  const recordId = user._id.toString();
+  const adminIds = await User.find({ isVerified: true }, "_id");
+
+  if (adminIds?.length) {
+    const followingData = adminIds.map((admin) => {
+      return {
+        fromUserId: recordId,
+        toUserId: admin._id.toString(),
+      };
+    });
+
+    await Follow.insertMany(followingData);
+  }
 
   if (user) {
     return res.status(200).send({ code: 200, msg: "user added successfully" });

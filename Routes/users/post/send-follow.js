@@ -13,8 +13,18 @@ const Follow = async (req, res) => {
     return res.status(200).send({ code: 400, msg: "unknown error" });
   }
 
+  let targetUserId = await User.findOne(
+    { username: targetUsername },
+    "_id isVerified"
+  );
+
+  if (targetUserId?.isVerified) {
+    return res
+      .status(200)
+      .send({ code: 400, msg: "sorry you can't unfollow admin" });
+  }
+
   let clientUserId = await User.findOne({ token }, "_id");
-  let targetUserId = await User.findOne({ username: targetUsername }, "_id");
 
   if (!clientUserId?._id || !targetUserId?._id) {
     return res.status(200).send({ code: 400, msg: "unknown error" });
