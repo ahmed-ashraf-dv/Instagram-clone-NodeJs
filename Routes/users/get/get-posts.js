@@ -5,7 +5,10 @@ const getPosts = async (req, res) => {
   const { page = 1, amount = 10 } = req.query;
   const { id } = req.params;
 
-  const user = await Users.findOne({ _id: id }, "_id username avatar");
+  const user = await Users.findOne(
+    { _id: id },
+    "_id username avatar isVerified"
+  );
 
   if (!user?._id) {
     return res.status(200).send({ code: 400, msg: "user not Found" });
@@ -33,6 +36,7 @@ const getPosts = async (req, res) => {
       user: {
         username: user.username,
         avatar: user.avatar,
+        isVerified: user.isVerified,
       },
     };
   });

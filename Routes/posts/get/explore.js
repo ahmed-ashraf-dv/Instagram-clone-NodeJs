@@ -41,7 +41,7 @@ const getExplore = async (req, res) => {
         $in: posts.map((post) => post.user_id),
       },
     },
-    "username _id name email bio avatar"
+    "username _id name email bio avatar isVerified"
   );
 
   posts = posts.map((post) => {
@@ -58,6 +58,7 @@ const getExplore = async (req, res) => {
       user: {
         username: currentUser?.username,
         avatar: currentUser?.avatar,
+        isVerified: currentUser.isVerified,
       },
     };
   });
