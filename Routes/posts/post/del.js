@@ -1,13 +1,13 @@
 const Posts = require("../../../schema/Post");
 const User = require("../../../schema/User");
-const fs = require("fs");
-var ObjectId = require('mongoose').Types.ObjectId;
+var ObjectId = require("mongoose").Types.ObjectId;
 
 const del = async (req, res) => {
   const { token } = req.body;
   const _id = req.params.id;
-  
-  if(!ObjectId.isValid(_id)) return res.status(200).send({code: 400, msg: "id not valid"})
+
+  if (!ObjectId.isValid(_id))
+    return res.status(200).send({ code: 400, msg: "id not valid" });
 
   // get post
   const post = (await Posts.findOne({ _id })) || {};
@@ -21,8 +21,6 @@ const del = async (req, res) => {
     const postDleted = await Posts.deleteOne({ _id });
 
     if (postDleted) {
-      fs.unlinkSync(`./public${post?.img}`);
-
       return res
         .status(200)
         .send({ code: 200, msg: "post deleated successfully" });

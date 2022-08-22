@@ -27,6 +27,6 @@ router.post("/sign-user", usersConroller.sign);
 router.post("/login", usersConroller.login);
 router.post("/follow", usersConroller.follow);
 router.post("/user-data-with-token", usersConroller.userDataWithToken);
-router.post("/update", usersConroller.updateAvatar, usersConroller.update);
+router.post("/update", usersConroller.update);
 
 module.exports = router;

@@ -1,62 +1,38 @@
 const User = require("../../../schema/User");
-const fs = require("fs");
-const uploadImg = require("../../../utils/uploadImg");
-const generateToken = require("../../../utils/generateToken");
-
-const updateAvatar = async (req, res, next) => {
-  const imgName = `imgs/avaters/${generateToken(25)}`;
-  const imgKey = "avatar";
-
-  uploadImg({ req, res, imgKey, imgName }, async ({ err }) => {
-    if (err)
-      return res
-        .status(200)
-        .send({ code: 400, msg: err || "something wrong !" });
-
-    next();
-  });
-};
+const imgFilter = require("../../../utils/imgFilter");
 
 const UpdateProfile = async (req, res) => {
-  const { token, username, name, password, email, bio } = req.body;
-  const file = req.file;
+  const { token, username, name, password, email, bio, avatar } = req.body;
 
   if (!token) {
-    if (file?.filename) fs.unlinkSync(`./public/${file?.filename}`);
-
     return res.status(200).send({ code: 400, msg: "token required" });
   }
 
-  const currentUser = await User.findOne({ token }, "avatar");
+  const currentUser = await User.findOne({ token }, "_id");
 
-  if (!currentUser?.avatar) {
-    if (file?.filename) fs.unlinkSync(`./public/${file?.filename}`);
-
+  if (!currentUser?._id) {
     return res
       .status(200)
       .send({ code: 400, message: "this user is not exist" });
   }
 
-  let userData = { username, name, password, email, bio };
+  let userData = { username, name, password, email, bio, avatar };
 
   // Check if username is available
   if (username) {
     const usernameIsExist = await User.find({ username }).count();
 
     if (usernameIsExist) {
-      if (file?.filename) fs.unlinkSync(`./public/${file?.filename}`);
-
       return res
         .status(200)
         .send({ code: 400, message: "username not available" });
     }
   }
 
-  if (file) {
-    const path = `/${file?.filename}`;
-    userData.avatar = path;
-
-    fs.unlinkSync(`./public${currentUser?.avatar}`);
+  if (avatar) {
+    if (!imgFilter(avatar).isValid) {
+      return res.status(200).send({ msg: imgFilter(img).msg, code: 400 });
+    }
   }
 
   const user = await User.updateOne({ token }, userData);
@@ -68,4 +44,4 @@ const UpdateProfile = async (req, res) => {
   res.status(200).json({ code: 200 });
 };
 
-module.exports = { update: UpdateProfile, updateAvatar };
+module.exports = UpdateProfile;
